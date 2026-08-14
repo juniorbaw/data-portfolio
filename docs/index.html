@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fashion Retail Analytics — Souleymane N'DIAYE</title>
+<meta name="description" content="Segmentation client et qualité de données sur 2 750 transactions retail. Erreur de grain détectée et corrigée.">
+<style>
+:root{--plum:#4A2B3D;--cream:#F5EDE4;--wine:#7B2D3B;--terra:#C4715A;--ink:#2B1A24;--muted:#8A7580;--line:#E5D9CE}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);line-height:1.6;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif}
+.wrap{max-width:920px;margin:0 auto;padding:0 24px 96px}
+header{background:var(--plum);color:var(--cream);padding:64px 0 56px;margin-bottom:48px}
+header .wrap{padding-bottom:0}
+h1{font-size:38px;margin:0 0 10px;letter-spacing:-.02em;line-height:1.15}
+.lede{font-size:17px;opacity:.82;max-width:640px;margin:0}
+.auth{margin-top:26px;font-size:14px;opacity:.62}
+.auth a{color:var(--cream)}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);
+ margin:56px 0 18px;font-weight:700}
+h3{font-size:20px;margin:32px 0 10px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-top:-92px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.kpi b{display:block;font-size:27px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.kpi em{display:block;font-size:11.5px;color:var(--muted);font-style:normal;margin-top:6px}
+.perimetre{font-size:12.5px;color:var(--muted);margin-top:14px}
+.callout{background:#fff;border-left:3px solid var(--wine);border-radius:0 10px 10px 0;
+ padding:20px 24px;margin:24px 0}
+.callout b{color:var(--wine)}
+table{width:100%;border-collapse:collapse;font-size:14.5px;background:#fff;
+ border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;
+ color:var(--muted);padding:12px 14px;border-bottom:1px solid var(--line)}
+td{padding:11px 14px;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:none}
+.n{text-align:right;font-variant-numeric:tabular-nums}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:9px}
+.stack{display:flex;height:34px;border-radius:7px;overflow:hidden;margin:6px 0 4px}
+.bar{display:flex;align-items:center;justify-content:center;color:#fff;font-size:12.5px;
+ font-weight:700;transition:.2s}
+.lbl{font-size:12.5px;color:var(--muted)}
+figure{margin:26px 0}
+figure img{width:100%;border:1px solid var(--line);border-radius:10px;display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:8px}
+.limites{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px 26px}
+.limites li{margin-bottom:9px;font-size:14.5px}
+footer{margin-top:64px;padding-top:22px;border-top:1px solid var(--line);
+ font-size:12.5px;color:var(--muted)}
+a{color:var(--wine)}
+</style></head><body>
+
+<header><div class="wrap">
+<h1>Fashion Retail Analytics</h1>
+<p class="lede">Segmentation client et qualité de données sur 2 750 transactions.
+Ce projet documente aussi une erreur de modélisation trouvée dans sa propre première version.</p>
+<p class="auth">Souleymane N'DIAYE · <a href="https://github.com/juniorbaw/data-portfolio">Code et documentation</a></p>
+</div></header>
+
+<div class="wrap">
+
+<div class="kpis">
+<div class="kpi"><b>2 750</b><span>Transactions</span></div>
+<div class="kpi"><b>430 952 $</b><span>Chiffre d'affaires</span></div>
+<div class="kpi"><b>156,71 $</b><span>Panier moyen</span><em>par transaction</em></div>
+<div class="kpi"><b>166</b><span>Clients</span></div>
+</div>
+<p class="perimetre">2 750 transactions retenues sur 3 400 — 19,1 % des lignes sources sans
+montant, exclues du chiffre d'affaires. Données synthétiques, montants en USD.
+Période : 02/10/2022 au 01/10/2023.</p>
+
+<h2>Ce que disent les données</h2>
+
+<h3>Un quart des clients, la moitié du chiffre d'affaires</h3>
+<p class="lbl">Part des clients</p><div class="stack" aria-label="Part des clients"><div class="bar" style="width:25.30%;background:#7B2D3B" title="4. VIP : 25,3 %">25,3 %</div><div class="bar" style="width:24.70%;background:#C4715A" title="3. Fidèle : 24,7 %">24,7 %</div><div class="bar" style="width:24.70%;background:#E0A48A" title="2. Régulier : 24,7 %">24,7 %</div><div class="bar" style="width:25.30%;background:#8A7580" title="1. Occasionnel : 25,3 %">25,3 %</div></div>
+<p class="lbl">Part du chiffre d'affaires</p><div class="stack" aria-label="Part du chiffre d'affaires"><div class="bar" style="width:51.43%;background:#7B2D3B" title="4. VIP : 51,4 %">51,4 %</div><div class="bar" style="width:20.25%;background:#C4715A" title="3. Fidèle : 20,3 %">20,3 %</div><div class="bar" style="width:16.35%;background:#E0A48A" title="2. Régulier : 16,4 %">16,4 %</div><div class="bar" style="width:11.96%;background:#8A7580" title="1. Occasionnel : 12,0 %">12,0 %</div></div>
+<div class="callout">Les segments sont des <b>quartiles de valeur</b> : chacun contient environ
+25 % des clients par construction. Ce qui varie, c'est leur contribution au chiffre d'affaires,
+de 12,0 % à 51,4 %.</div>
+
+<table><thead><tr><th>Segment</th><th class="n">Clients</th><th class="n">% clients</th>
+<th class="n">Chiffre d'affaires</th><th class="n">% CA</th><th class="n">Achats</th>
+<th class="n">Panier moyen</th></tr></thead><tbody><tr><td><span class='dot' style='background:#7B2D3B'></span>4. VIP</td><td class='n'>42</td><td class='n'>25,3 %</td><td class='n'>221 653 $</td><td class='n'><b>51,4 %</b></td><td class='n'>777</td><td class='n'>304,01 $</td></tr>
+<tr><td><span class='dot' style='background:#C4715A'></span>3. Fidèle</td><td class='n'>41</td><td class='n'>24,7 %</td><td class='n'>87 279 $</td><td class='n'><b>20,3 %</b></td><td class='n'>794</td><td class='n'>110,68 $</td></tr>
+<tr><td><span class='dot' style='background:#E0A48A'></span>2. Régulier</td><td class='n'>41</td><td class='n'>24,7 %</td><td class='n'>70 477 $</td><td class='n'><b>16,4 %</b></td><td class='n'>644</td><td class='n'>110,72 $</td></tr>
+<tr><td><span class='dot' style='background:#8A7580'></span>1. Occasionnel</td><td class='n'>42</td><td class='n'>25,3 %</td><td class='n'>51 543 $</td><td class='n'><b>12,0 %</b></td><td class='n'>535</td><td class='n'>98,57 $</td></tr></tbody></table>
+
+<h3>Le levier des VIP est le panier, pas la fréquence</h3>
+<div class="callout">Les VIP réalisent <b>777 achats</b> contre
+<b>794</b> pour les Fidèles : ils n'achètent pas plus souvent.
+Leur panier moyen est de 304,01 $ contre
+110,68 $, soit
+<b>2.7 fois plus</b>.
+Le levier commercial est la montée en gamme, pas la relance.</div>
+
+<h3>Le premier contributeur au chiffre d'affaires est le plus mal noté</h3>
+<table><thead><tr><th>Article</th><th class="n">Chiffre d'affaires</th>
+<th class="n">Note moyenne</th></tr></thead><tbody><tr><td>Tunic</td><td class='n'>17 275 $</td><td class='n'><b>2,54</b></td></tr>
+<tr><td>Flannel Shirt</td><td class='n'>5 426 $</td><td class='n'><b>2,59</b></td></tr>
+<tr><td>Jacket</td><td class='n'>7 899 $</td><td class='n'><b>2,64</b></td></tr>
+<tr><td>Leggings</td><td class='n'>8 087 $</td><td class='n'><b>2,66</b></td></tr>
+<tr><td>Sunglasses</td><td class='n'>5 495 $</td><td class='n'><b>2,67</b></td></tr></tbody></table>
+<div class="callout"><b>Tunic</b> est le premier contributeur au chiffre
+d'affaires (17 275 $) et l'article le plus mal noté
+(2,54 / 5). Le revenu d'aujourd'hui finance l'attrition de demain :
+audit qualité avant toute action d'acquisition.</div>
+
+<h3>Le mode de paiement discrimine peu</h3>
+<div class="callout">Panier moyen de <b>160,37 $</b> par carte
+contre <b>152,70 $</b> en espèces, soit un écart de
+5 %.
+Faible, et sur données synthétiques : à ne pas surinterpréter.</div>
+
+<h2>Graphiques</h2>
+<figure><img src="assets/01_segments_part.png" alt="Un quart des clients, la moitié du chiffre d'affaires" loading="lazy"><figcaption>Un quart des clients, la moitié du chiffre d'affaires</figcaption></figure>
+<figure><img src="assets/02_panier_vs_frequence.png" alt="Le levier des VIP est le panier, pas la fréquence" loading="lazy"><figcaption>Le levier des VIP est le panier, pas la fréquence</figcaption></figure>
+<figure><img src="assets/03_ca_satisfaction.png" alt="Le premier contributeur au CA est le plus mal noté" loading="lazy"><figcaption>Le premier contributeur au CA est le plus mal noté</figcaption></figure>
+<figure><img src="assets/04_clients_nuage.png" alt="Les VIP s'étirent vers la droite, pas vers le haut" loading="lazy"><figcaption>Les VIP s'étirent vers la droite, pas vers le haut</figcaption></figure>
+<figure><img src="assets/05_top_articles.png" alt="Tunic domine le chiffre d'affaires — et déçoit" loading="lazy"><figcaption>Tunic domine le chiffre d'affaires — et déçoit</figcaption></figure>
+
+<h2>L'erreur de grain, et sa correction</h2>
+<p>La première version de ce tableau de bord affichait <b>7,6 M de chiffre d'affaires</b> pour
+2 750 transactions et un panier moyen de 156,71. Ces trois nombres sont
+incompatibles : leur produit donne 430 952.</p>
+<p>Les colonnes <code>total_depense</code> et <code>nb_achats</code> étaient des agrégats
+<b>client</b>, laissés dans la table de <b>transactions</b> et donc répétés sur chaque ligne.
+L'outil de restitution les additionnait, comptant chaque client autant de fois qu'il avait
+d'achats — 16.6 en moyenne. Le « 2 800 clients » avait la
+même origine : un décompte de lignes, pas de clients distincts. Il y a 166 clients.</p>
+<div class="callout">La correction est structurelle : deux tables, deux grains, et un test
+(<code>assert_coherence_ca</code>) qui échoue si les deux totaux ne se rejoignent plus.
+Il tourne à chaque build.</div>
+
+<h2>Méthode et limites</h2>
+<div class="limites"><ul>
+<li><b>Données synthétiques</b>, générées à des fins pédagogiques. Aucune conclusion n'est
+transposable à une enseigne réelle.</li>
+<li><b>19,1 % des lignes sources sans montant</b>, exclues du chiffre d'affaires. Si ces lignes
+ne sont pas manquantes au hasard, le CA et les paniers sont biaisés d'une façon que ce jeu de
+données ne permet pas de mesurer.</li>
+<li><b>9,5 % de notes manquantes</b>, sans test de biais de non-réponse. La hiérarchie des notes
+est indicative, pas conclusive.</li>
+<li><b>Effectif faible</b> : 166 clients, soit 41 à 42 par quartile. Les moyennes de segment
+sont sensibles aux valeurs extrêmes et aucun test de significativité n'a été mené.</li>
+<li><b>Segments à effectif constant par construction.</b> Ils ne décrivent pas une structure
+client observée mais un découpage imposé.</li>
+<li><b>12 mois d'historique</b>, sans année de comparaison : aucune analyse de tendance ni de
+saisonnalité n'est fiable.</li>
+<li>Montants en <b>USD</b> uniquement.</li>
+</ul></div>
+
+<footer>Page générée par <code>scripts/make_page.py</code> à partir des tables du projet.
+Aucun chiffre n'est écrit en dur : tous sont recalculés à chaque génération.<br>
+Souleymane N'DIAYE · <a href="https://github.com/juniorbaw">github.com/juniorbaw</a> ·
+<a href="https://www.linkedin.com/in/souleymane-nd">LinkedIn</a></footer>
+
+</div></body></html>
