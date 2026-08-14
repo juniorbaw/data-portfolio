@@ -1,0 +1,10 @@
+# Copier dans ~/.dbt/profiles.yml
+# Aucun entrepôt cloud requis : DuckDB tourne en local, le projet est reproductible
+# par n'importe qui en trois commandes.
+fashion_retail:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: fashion_retail.duckdb
+      threads: 4

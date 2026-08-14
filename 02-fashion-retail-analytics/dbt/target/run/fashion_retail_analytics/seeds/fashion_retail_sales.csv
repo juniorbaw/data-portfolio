@@ -1,0 +1,11 @@
+
+    
+    
+    truncate table "fashion_retail"."main"."fashion_retail_sales";
+    -- dbt seed --
+    
+          COPY "fashion_retail"."main"."fashion_retail_sales" FROM '/Users/souleyjr/data-portfolio/02-fashion-retail-analytics/dbt/seeds/fashion_retail_sales.csv' (FORMAT CSV, HEADER TRUE, DELIMITER ',')
+        
+
+;
+  

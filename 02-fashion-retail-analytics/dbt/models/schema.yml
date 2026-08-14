@@ -1,0 +1,78 @@
+version: 2
+
+models:
+
+  - name: stg_transactions
+    description: >
+      Grain : une ligne = une transaction. 2 750 lignes attendues.
+      Aucune colonne agrégée au niveau client. Les 650 lignes sans montant
+      (19,1 % de la source) sont exclues du périmètre de chiffre d'affaires.
+    columns:
+      - name: transaction_id
+        description: Identifiant technique, unique par transaction.
+        data_tests: [unique, not_null]
+      - name: client_id
+        description: Référence client. Doit exister dans dim_clients.
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_clients')
+              field: client_id
+      - name: montant
+        description: Montant de la transaction, en USD.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range: { min_value: 0, inclusive: false }
+      - name: date_transaction
+        description: Date d'achat. Entre le 2022-10-02 et le 2023-10-01.
+        data_tests: [not_null]
+      - name: note
+        description: Note client de 1 à 5. Nullable — 9,5 % de valeurs manquantes.
+      - name: paiement
+        description: Mode de paiement.
+        data_tests:
+          - accepted_values: { values: ["Credit Card", "Cash", "Unknown"] }
+
+  - name: dim_clients
+    description: >
+      Grain : une ligne = un client. 166 lignes attendues.
+      SEUL modèle où vivent les agrégats client.
+
+    columns:
+      - name: client_id
+        description: Clé primaire.
+        data_tests: [unique, not_null]
+      - name: ca_client
+        description: Somme des montants du client, en USD.
+        data_tests: [not_null]
+      - name: nb_achats
+        description: Nombre de transactions du client. De 6 à 28, moyenne 16,6.
+        data_tests: [not_null]
+      - name: segment_valeur
+        description: >
+          Quartile de valeur client. Chaque segment pèse environ 25 % des CLIENTS
+          par construction. Ne jamais présenter ces parts comme des parts de CA.
+        data_tests:
+          - accepted_values:
+              values: ["1. Occasionnel", "2. Régulier", "3. Fidèle", "4. VIP"]
+
+  - name: mart_kpi_global
+    description: Les quatre indicateurs de la page d'accueil du tableau de bord.
+    columns:
+      - name: panier_moyen_usd
+        description: >
+          Moyenne PAR TRANSACTION — chiffre d'affaires divisé par le nombre de
+          transactions. À ne pas confondre avec la moyenne des paniers moyens
+          par client, qui vaut 156,54 et non 156,71.
+
+  - name: mart_segments
+    description: Performance par segment de valeur, construite sur dim_clients.
+
+  - name: mart_produits
+    description: Performance et satisfaction par article, avec alerte croisée.
+
+seeds:
+  - name: fashion_retail_sales
+    description: >
+      Source brute, 3 400 lignes. Données SYNTHÉTIQUES à des fins pédagogiques :
+      aucune conclusion n'est transposable à une enseigne réelle.

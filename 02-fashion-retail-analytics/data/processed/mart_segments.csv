@@ -1,0 +1,5 @@
+segment_valeur,nb_clients,ca,nb_achats,panier_moyen,pct_clients,pct_ca
+1. Occasionnel,42,51543.0,535,98.57,25.3,11.96
+2. Régulier,41,70477.0,644,110.72,24.7,16.35
+3. Fidèle,41,87279.0,794,110.68,24.7,20.25
+4. VIP,42,221653.0,777,304.02,25.3,51.43

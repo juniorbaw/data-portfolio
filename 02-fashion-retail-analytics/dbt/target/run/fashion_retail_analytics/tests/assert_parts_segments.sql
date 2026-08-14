@@ -1,0 +1,22 @@
+
+    
+    select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+  -- Les parts de clients et les parts de chiffre d'affaires doivent chacune
+-- sommer à 100 %.  Doit renvoyer 0 ligne.
+
+select
+    sum(pct_clients) as total_clients,
+    sum(pct_ca)      as total_ca
+from "fashion_retail"."main"."mart_segments"
+having abs(sum(pct_clients) - 100) > 0.1
+    or abs(sum(pct_ca) - 100) > 0.1
+  
+  
+      
+    ) dbt_internal_test

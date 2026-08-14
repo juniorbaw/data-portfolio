@@ -1,0 +1,24 @@
+name: fashion_retail_analytics
+version: "2.0.0"
+config-version: 2
+profile: fashion_retail
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  fashion_retail_analytics:
+    staging:
+      +materialized: view      # léger, toujours frais
+    marts:
+      +materialized: table     # interrogé souvent par la BI
+
+seeds:
+  fashion_retail_analytics:
+    fashion_retail_sales:
+      +column_types:
+        Customer Reference ID: VARCHAR
