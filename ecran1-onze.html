@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le onze — ce que le jeu pensait, ce qui s'est passé</title>
+<!--
+  Registre : hommage à l'ergonomie des écrans de composition, 2006-2016.
+  Aucun actif de marque, aucune image externe. Terrain et maillots en SVG.
+  La perspective est calculée dans les coordonnées, pas appliquée en CSS :
+  les joueurs restent debout au lieu de s'écraser avec le terrain.
+-->
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+.ere-2006{
+  --dalle:#4a545f;--dalleh:#616d7a;--creux:#1b2026;
+  --biseau:#9aa6b2;--biseauclair:#d6dee5;--biseauEp:2px;
+  --encre:#fff;--encre2:#e6ebef;--discret:#b9c1c9;
+  --accent:#f5c518;--accent2:#5aa8e8;
+  --elite:#ff6b6b;--haut:#ffd93d;--moyen:#6edb8a;--bas:#c2cad2;
+  --titre:"Barlow Condensed";--espace:.02em;--r:0px;--rd:0px;--hBarre:11px;
+  --gazonA:#33543c;--gazonB:#2a4632;--ciel:#2b333b;
+  --metal:linear-gradient(180deg,#6d7883 0%,#4e5862 42%,#39424b 100%);
+  --plaque:#e8edf1;--plaqueTxt:#1b2026;
+}
+.ere-2010{
+  --dalle:#161b24;--dalleh:#222834;--creux:#080b10;
+  --biseau:#39414d;--biseauclair:#59636f;--biseauEp:1px;
+  --encre:#f4f6f9;--encre2:#aab4c2;--discret:#727b89;
+  --accent:#e8206c;--accent2:#00b4e0;
+  --elite:#ff4d5e;--haut:#ffc93c;--moyen:#5ad07a;--bas:#8a94a2;
+  --titre:"Oswald";--espace:.06em;--r:2px;--rd:3px;--hBarre:9px;
+  --gazonA:#16402a;--gazonB:#10301f;--ciel:#080d14;
+  --metal:linear-gradient(180deg,#2a313d 0%,#181d26 100%);
+  --plaque:#dfe4ea;--plaqueTxt:#12161d;
+}
+.ere-2015{
+  --dalle:#15304f;--dalleh:#1f4269;--creux:#050e18;
+  --biseau:#2d5580;--biseauclair:#4a7aae;--biseauEp:1px;
+  --encre:#fff;--encre2:#b8cee5;--discret:#7f99b5;
+  --accent:#00d4ff;--accent2:#7fe3a0;
+  --elite:#ff5a5a;--haut:#ffd24a;--moyen:#4fd48a;--bas:#8fa9c4;
+  --titre:"Inter";--espace:.14em;--r:5px;--rd:9px;--hBarre:8px;
+  --gazonA:#1b5c38;--gazonB:#14492c;--ciel:#061420;
+  --metal:linear-gradient(180deg,#1f4269 0%,#12283f 100%);
+  --plaque:#fff;--plaqueTxt:#0b1a2e;
+}
+
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;color:var(--encre);background:var(--ciel);
+  font-family:Inter,-apple-system,sans-serif;line-height:1.42;
+  font-variant-numeric:tabular-nums lining-nums}
+
+#fond{position:fixed;inset:0;z-index:-4;background:var(--ciel)}
+#fond::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse 46% 34% at 20% -4%,rgba(200,222,255,.14) 0%,transparent 64%),
+             radial-gradient(ellipse 46% 34% at 80% -4%,rgba(200,222,255,.14) 0%,transparent 64%)}
+#grain{position:fixed;inset:-40%;z-index:-2;pointer-events:none;opacity:.10;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E");
+  animation:fourmille 700ms steps(4) infinite}
+@keyframes fourmille{0%{transform:translate(0,0)}25%{transform:translate(-2%,1%)}
+  50%{transform:translate(1%,-2%)}75%{transform:translate(-1%,-1%)}}
+#scan{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:repeating-linear-gradient(180deg,rgba(0,0,0,.16) 0px,rgba(0,0,0,.16) 1px,transparent 1px,transparent 3px)}
+#vignette{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 98% 86% at 50% 44%,transparent 42%,rgba(0,0,0,.62) 100%)}
+
+.systeme{position:sticky;top:0;z-index:20;background:var(--metal);
+  border-bottom:var(--biseauEp) solid var(--biseau);
+  box-shadow:inset 0 1px 0 var(--biseauclair),0 3px 14px rgba(0,0,0,.65)}
+.systeme-in{max-width:1180px;margin:0 auto;padding:0 14px;display:flex;
+  align-items:stretch;flex-wrap:wrap;min-height:42px}
+.onglet{display:flex;align-items:center;gap:7px;padding:0 15px;cursor:pointer;text-decoration:none;
+  background:none;border:0;border-right:1px solid rgba(0,0,0,.35);
+  box-shadow:1px 0 0 rgba(255,255,255,.07);color:var(--discret);
+  font-family:var(--titre),Inter,sans-serif;font-size:11px;letter-spacing:.13em;
+  text-transform:uppercase;font-weight:600;position:relative;
+  transition:all 160ms cubic-bezier(.22,1,.36,1)}
+.onglet:first-child{border-left:1px solid rgba(0,0,0,.35)}
+.onglet .num{font-family:"JetBrains Mono",monospace;font-size:9.5px;font-weight:700;
+  color:var(--creux);background:var(--discret);padding:1px 5px;border-radius:var(--r)}
+.onglet:hover{color:var(--encre);background:rgba(255,255,255,.07)}
+.onglet[aria-current="page"]{color:var(--encre);background:rgba(0,0,0,.34)}
+.onglet[aria-current="page"] .num{background:var(--accent);color:var(--creux)}
+.onglet[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--accent)}
+.generation{margin-left:auto;display:flex;align-items:center;padding:5px 0}
+.generation .lbl{font-family:var(--titre),Inter,sans-serif;font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--discret);font-weight:700;margin-right:9px;white-space:nowrap}
+.gen{background:rgba(0,0,0,.32);border:1px solid rgba(0,0,0,.5);border-top-color:rgba(255,255,255,.14);
+  color:var(--encre2);font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700;
+  padding:6px 11px;cursor:pointer;transition:all 160ms cubic-bezier(.22,1,.36,1)}
+.gen:first-of-type{border-radius:var(--r) 0 0 var(--r)}
+.gen:last-of-type{border-radius:0 var(--r) var(--r) 0}
+.gen:hover{background:rgba(255,255,255,.1);color:var(--encre)}
+.gen[aria-pressed="true"]{background:var(--accent);color:var(--creux);border-color:var(--accent);
+  box-shadow:0 0 12px -2px var(--accent)}
+
+.ecran{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:18px 14px 60px}
+
+.bandeau{background:var(--metal);border:var(--biseauEp) solid var(--biseau);
+  border-top-color:var(--biseauclair);border-radius:var(--rd);padding:11px 16px;
+  display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;
+  box-shadow:inset 0 1px 0 var(--biseauclair),0 4px 16px rgba(0,0,0,.6)}
+.bandeau::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent)}
+.ecusson{width:28px;height:28px;flex:none;background:var(--accent);
+  clip-path:polygon(50% 0%,100% 22%,100% 66%,50% 100%,0% 66%,0% 22%);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--titre),Inter,sans-serif;font-weight:700;font-size:12px;color:var(--creux)}
+.bandeau h1{font-family:var(--titre),Inter,sans-serif;font-weight:600;
+  font-size:clamp(15px,2.4vw,21px);letter-spacing:var(--espace);
+  text-transform:uppercase;margin:0;line-height:1.12}
+.bandeau .puce{margin-left:auto;flex:none;font-family:"JetBrains Mono",monospace;
+  font-size:9.5px;font-weight:700;letter-spacing:.09em;color:var(--creux);
+  background:var(--accent);padding:3px 8px;border-radius:var(--r);white-space:nowrap}
+.lettre{display:inline-block;opacity:0;transform:translateY(.34em)}
+.vu .lettre{opacity:1;transform:none;transition:opacity 380ms cubic-bezier(.22,1,.36,1),transform 380ms cubic-bezier(.22,1,.36,1)}
+.balayage{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.26) 50%,transparent 62%);
+  transform:translateX(-110%)}
+.vu .balayage{animation:balaye 1000ms cubic-bezier(.22,1,.36,1) 220ms both}
+@keyframes balaye{to{transform:translateX(110%)}}
+
+.chapeau{font-size:13.5px;color:var(--encre);max-width:80ch;margin:11px 0 0;
+  text-shadow:0 2px 10px rgba(0,0,0,1);line-height:1.5}
+.chapeau strong{font-weight:600}
+
+.commandes{display:flex;gap:9px;margin:12px 0 0;flex-wrap:wrap}
+.groupeBtn{display:flex;background:rgba(0,0,0,.42);
+  border:var(--biseauEp) solid var(--biseau);border-top-color:var(--biseauclair);
+  border-radius:var(--rd);overflow:hidden}
+.groupeBtn .lbl{display:flex;align-items:center;padding:0 11px;
+  font-family:var(--titre),Inter,sans-serif;font-size:9px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--discret);font-weight:700;
+  border-right:1px solid rgba(0,0,0,.45);white-space:nowrap}
+.cmd{background:none;border:0;border-right:1px solid rgba(0,0,0,.45);
+  box-shadow:1px 0 0 rgba(255,255,255,.06);padding:8px 14px;cursor:pointer;
+  color:var(--discret);font-family:var(--titre),Inter,sans-serif;font-size:10.5px;
+  letter-spacing:.12em;text-transform:uppercase;font-weight:600;
+  transition:all 160ms cubic-bezier(.22,1,.36,1)}
+.cmd:last-child{border-right:0;box-shadow:none}
+.cmd:hover{color:var(--encre);background:rgba(255,255,255,.06)}
+.cmd[aria-pressed="true"]{color:var(--creux);background:var(--accent);box-shadow:inset 0 -2px 0 rgba(0,0,0,.25)}
+
+.plateau{display:grid;grid-template-columns:360px minmax(0,1fr);gap:11px;margin-top:11px}
+@media (max-width:1000px){.plateau{grid-template-columns:1fr}}
+
+.colonne{background:linear-gradient(180deg,var(--dalle) 0%,rgba(0,0,0,.9) 100%);
+  border:var(--biseauEp) solid var(--biseau);border-top-color:var(--biseauclair);
+  border-radius:var(--rd);overflow:hidden;
+  box-shadow:inset 0 1px 0 var(--biseauclair),0 4px 16px rgba(0,0,0,.6)}
+.coltitre{background:var(--metal);border-bottom:1px solid var(--biseau);padding:6px 13px;
+  font-family:var(--titre),Inter,sans-serif;font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;font-weight:600;color:var(--encre2);
+  display:flex;justify-content:space-between;align-items:center}
+.coltitre em{font-style:normal;font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--discret)}
+
+.terrainBoite{padding:8px}
+.terrainSVG{width:100%;height:auto;display:block}
+.trace{stroke:rgba(255,255,255,.38);fill:none;stroke-width:1.2}
+.pion{cursor:pointer}
+.pastille{stroke:rgba(0,0,0,.55);stroke-width:1.5}
+.maillot{stroke:rgba(0,0,0,.42);stroke-width:.9}
+.plaqueFond{fill:var(--plaque);stroke:rgba(0,0,0,.45);stroke-width:.7}
+.plaqueTxt{fill:var(--plaqueTxt);font-family:Inter,sans-serif;font-weight:600}
+.plaqueNum{fill:var(--plaqueTxt);font-family:"JetBrains Mono",monospace;font-weight:700}
+.pion.sel .plaqueFond{fill:var(--accent);stroke:var(--accent)}
+.pion.sel .plaqueTxt,.pion.sel .plaqueNum{fill:var(--creux)}
+.etiq{fill:var(--encre);font-family:var(--titre),Inter,sans-serif;font-weight:600;
+  paint-order:stroke;stroke:rgba(0,0,0,.75);stroke-width:2.4px}
+
+.miniListe{border-top:var(--biseauEp) solid var(--biseau);max-height:170px;overflow-y:auto}
+.miniListe::-webkit-scrollbar{width:8px}
+.miniListe::-webkit-scrollbar-track{background:var(--creux)}
+.miniListe::-webkit-scrollbar-thumb{background:var(--biseau)}
+.rangee{display:flex;align-items:center;gap:8px;padding:4px 12px;cursor:pointer;
+  border-left:3px solid transparent;border-bottom:1px solid rgba(255,255,255,.05)}
+.rangee:hover{background:rgba(255,255,255,.06)}
+.rangee.sel{background:rgba(255,255,255,.12);border-left-color:var(--accent)}
+.rangee.sel .rNom{color:var(--accent)}
+.rPoste{flex:none;width:33px;text-align:center;padding:2px 0;border-radius:var(--r);
+  font-family:"JetBrains Mono",monospace;font-size:8.5px;font-weight:700;color:var(--creux)}
+.rNom{flex:1;font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rVal{flex:none;font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700}
+
+.fiche{padding:13px 15px 15px}
+.tete{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;
+  border-bottom:1px solid rgba(255,255,255,.13);padding-bottom:10px;margin-bottom:11px}
+.ficheNom{font-family:var(--titre),Inter,sans-serif;font-size:clamp(19px,3vw,27px);
+  font-weight:600;letter-spacing:var(--espace);text-transform:uppercase;margin:0;line-height:1.02}
+.ficheClub{display:flex;align-items:center;gap:7px;margin-top:4px;
+  font-family:var(--titre),Inter,sans-serif;font-size:13px;font-weight:600;
+  letter-spacing:.04em;text-transform:uppercase;color:var(--accent2)}
+.fanion{width:11px;height:14px;flex:none;background:var(--accent2);
+  clip-path:polygon(0 0,100% 0,100% 74%,50% 100%,0 74%)}
+.ficheMeta{font-size:9.5px;color:var(--discret);letter-spacing:.1em;text-transform:uppercase;margin-top:3px}
+.ficheNote{text-align:right;flex:none}
+.ficheNote b{display:block;font-family:var(--titre),Inter,sans-serif;
+  font-size:clamp(38px,6vw,54px);line-height:.86;font-weight:700;text-shadow:0 3px 14px rgba(0,0,0,.9)}
+.ficheNote span{font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--discret);display:block;margin-top:4px}
+
+.verdict{background:var(--creux);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);
+  padding:10px 12px;margin-bottom:12px;box-shadow:inset 0 2px 5px rgba(0,0,0,.7)}
+.vLigne{display:grid;grid-template-columns:112px 38px minmax(0,1fr);gap:9px;align-items:center;padding:3px 0}
+.vLbl{font-family:var(--titre),Inter,sans-serif;font-size:10px;letter-spacing:.11em;
+  text-transform:uppercase;font-weight:600;color:var(--encre2)}
+.vNum{font-family:"JetBrains Mono",monospace;font-size:14px;font-weight:700;text-align:right}
+.regle{position:relative;height:14px;background:rgba(0,0,0,.62);border:1px solid rgba(0,0,0,.75);
+  border-radius:var(--r);box-shadow:inset 0 2px 4px rgba(0,0,0,.85)}
+.regle i{position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.11)}
+.remplissage{position:absolute;left:0;top:0;bottom:0;border-radius:0 var(--r) var(--r) 0;
+  transform-origin:left center;animation:pousser 620ms cubic-bezier(.22,1,.36,1) both;
+  box-shadow:0 0 10px currentColor}
+@keyframes pousser{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.vEcart{border-top:1px solid rgba(255,255,255,.11);margin-top:6px;padding-top:6px;
+  display:grid;grid-template-columns:112px 38px minmax(0,1fr);gap:9px;align-items:center}
+.vFleche{font-size:15px;font-weight:700}
+.vTexte{font-size:11.5px;color:var(--encre2);line-height:1.4}
+.vTexte b{color:var(--encre)}
+
+.sousTitre{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--discret);
+  font-family:var(--titre),Inter,sans-serif;font-weight:700;margin:0 0 1px}
+.sousTitre em{font-style:normal;text-transform:none;letter-spacing:0;font-size:10.5px;
+  font-family:Inter,sans-serif;font-weight:400}
+.corps{margin-top:8px}
+.corps.avecRadar{display:grid;grid-template-columns:minmax(0,232px) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:700px){.corps.avecRadar{grid-template-columns:1fr}}
+.famille{font-family:var(--titre),Inter,sans-serif;font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;font-weight:700;color:var(--encre2);
+  border-bottom:2px solid;padding-bottom:2px;margin:9px 0 4px}
+.famille:first-child{margin-top:0}
+.blocAttrs{display:grid;grid-template-columns:repeat(auto-fill,minmax(224px,1fr));gap:0 20px}
+.attr{display:flex;align-items:center;gap:8px;padding:2px 0}
+.attrLbl{flex:none;width:106px;font-size:11.5px;color:var(--encre2)}
+.attrVal{flex:none;width:27px;text-align:right;font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700}
+.attrPiste{flex:1;height:var(--hBarre);background:var(--creux);border:1px solid rgba(0,0,0,.65);
+  border-radius:var(--r);box-shadow:inset 0 1px 3px rgba(0,0,0,.85);overflow:hidden}
+.attrRempli{height:100%;transform-origin:left center;animation:pousser 520ms cubic-bezier(.22,1,.36,1) both}
+.radarBoite{display:flex;justify-content:center}
+.rToile{stroke:rgba(255,255,255,.16);fill:none;stroke-width:1}
+.rAxe{stroke:rgba(255,255,255,.12);stroke-width:1}
+.rMed{stroke:var(--discret);stroke-width:1;stroke-dasharray:3 3;fill:none}
+.rForme{fill:var(--accent);fill-opacity:.2;stroke:var(--accent);stroke-width:2.2;stroke-linejoin:round;
+  animation:eclore 640ms cubic-bezier(.22,1,.36,1) both;transform-origin:center}
+@keyframes eclore{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
+.rPt{fill:var(--accent)}
+.rLbl{fill:var(--encre2);font-size:9.5px;font-family:Inter,sans-serif;font-weight:500}
+.rVal{font-size:10px;font-family:"JetBrains Mono",monospace;font-weight:700}
+.sansAttr{font-size:12px;color:var(--discret);padding:10px 0;font-style:italic}
+
+.note{border-left:3px solid var(--accent);padding:11px 14px 11px 12px;margin:16px 0 0;
+  background:rgba(0,0,0,.72);border-radius:0 var(--r) var(--r) 0}
+.noteTitre{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:6px;font-family:var(--titre),Inter,sans-serif}
+.note p{font-size:11.5px;color:var(--encre2);margin:0 0 6px;line-height:1.5}
+.note p:last-child{margin-bottom:0}
+.note b{color:var(--encre)}
+.erreur{border-left:3px solid var(--elite);padding:12px 14px;margin:16px 0;font-size:13px;
+  color:var(--encre2);background:rgba(0,0,0,.75)}
+.erreur code{font-family:"JetBrains Mono",monospace;font-size:12px;background:var(--creux);
+  padding:2px 6px;border-radius:2px;color:var(--encre)}
+
+@media (prefers-reduced-motion:reduce){
+  .lettre{opacity:1;transform:none;transition:none}
+  .balayage{display:none}#grain{animation:none}
+  .remplissage,.attrRempli,.rForme{animation:none}
+}
+</style>
+</head>
+<body class="ere-2010">
+
+<div id="fond"></div><div id="grain"></div><div id="scan"></div><div id="vignette"></div>
+
+<nav class="systeme" aria-label="Navigation">
+  <div class="systeme-in">
+    <a class="onglet" href="ecran1-onze.html" aria-current="page"><span class="num">01</span>Le onze</a>
+    <a class="onglet" href="ecran2-gradient.html"><span class="num">02</span>Le résultat</a>
+    <a class="onglet" href="ecran3-cas.html"><span class="num">03</span>Les cas</a>
+    <div class="generation" role="group" aria-label="Génération d'interface">
+      <span class="lbl">Génération</span>
+      <button class="gen" data-ere="ere-2006" aria-pressed="false">2006</button>
+      <button class="gen" data-ere="ere-2010" aria-pressed="true">2010</button>
+      <button class="gen" data-ere="ere-2015" aria-pressed="false">2015</button>
+    </div>
+  </div>
+</nav>
+
+<section class="ecran">
+
+  <div class="bandeau" id="bandeau">
+    <div class="ecusson">01</div>
+    <h1 id="titre">Ce que le jeu pensait, ce qui s'est passé</h1>
+    <div class="puce" id="puceFormation">4-4-2</div>
+    <div class="balayage"></div>
+  </div>
+
+  <p class="chapeau">
+    Deux compositions, les mêmes joueurs. <strong>Celle que le jeu aurait choisie</strong> d'après ses
+    notes d'avant-saison, et <strong>celle que les entraîneurs ont réellement alignée</strong> le plus
+    souvent. Clique sur un joueur pour voir sa fiche.
+  </p>
+
+  <div class="commandes">
+    <div class="groupeBtn" role="group" aria-label="Critère de sélection">
+      <span class="lbl">Onze selon</span>
+      <button class="cmd" data-critere="note" aria-pressed="true">La note du jeu</button>
+      <button class="cmd" data-critere="temps" aria-pressed="false">Le temps de jeu</button>
+    </div>
+  </div>
+
+  <div class="plateau" id="plateau" hidden>
+    <div class="colonne">
+      <div class="coltitre"><span>Composition</span><em id="lblFormation"></em></div>
+      <div class="terrainBoite" id="terrainBoite"></div>
+      <div class="miniListe" id="miniListe"></div>
+    </div>
+    <div class="colonne">
+      <div class="coltitre"><span>Fiche joueur</span><em id="formeLbl">barres</em></div>
+      <div class="fiche" id="fiche"></div>
+    </div>
+  </div>
+
+  <div class="erreur" id="erreur" hidden>
+    <p><b>Les données ne se chargent pas.</b> Cette page lit des fichiers externes : elle doit être
+    servie par un serveur.</p>
+    <p><code>cd ~/data-portfolio &amp;&amp; python3 -m http.server 8000</code></p>
+  </div>
+
+  <div class="note">
+    <div class="noteTitre">Méthode</div>
+    <p><b>La formation est mesurée, pas choisie.</b> Le 4-4-2 représentait 58,9&nbsp;% des alignements
+    en 2008/2009 et 24,0&nbsp;% en 2015/2016, où le 4-5-1 domine à 41,0&nbsp;%. Chaque génération
+    affiche la formation de son époque. Les postes sont attribués en cascade, chaque joueur placé à
+    l'emplacement le plus proche de sa <b>position médiane réelle</b> sur le terrain.</p>
+    <p><b>« Mieux noté que 84 % des milieux »</b> est un rang, pas une note sur 100. Un défenseur n'est
+    jamais comparé à un attaquant. Les gardiens sont classés entre gardiens ; leurs attributs de champ
+    étant des valeurs par défaut du jeu, ils n'ont pas de détail d'attributs.</p>
+    <p><b>Un désaccord n'est pas une erreur du jeu.</b> Blessure, suspension et choix d'entraîneur
+    produisent le même signal, et la source n'en contient aucun. Sur l'ensemble des joueurs, les deux
+    classements ne partagent que 3,6&nbsp;% de leur variation. Joueurs transférés en cours de saison exclus.</p>
+  </div>
+
+</section>
+
+<script>
+const titre=document.getElementById('titre');
+const txt=titre.textContent; titre.textContent='';
+[...txt].forEach((c,i)=>{const s=document.createElement('span');s.className='lettre';
+  s.textContent=c===' '?'\u00A0':c;s.style.transitionDelay=(i*22)+'ms';titre.appendChild(s);});
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vu');obs.unobserve(e.target);}})},{threshold:.2});
+obs.observe(document.getElementById('bandeau'));
+
+const FORMATION={'ere-2006':'4-4-2','ere-2010':'4-4-2','ere-2015':'4-5-1'};
+const FUITE={'ere-2006':1,'ere-2010':.74,'ere-2015':.58};
+const TEINTE={GB:'var(--haut)',DG:'var(--accent2)',DCG:'var(--accent2)',DCD:'var(--accent2)',
+  DD:'var(--accent2)',MDF:'var(--moyen)',MG:'var(--moyen)',MCG:'var(--moyen)',
+  MCD:'var(--moyen)',MD:'var(--moyen)',ATG:'var(--elite)',ATD:'var(--elite)',BU:'var(--elite)'};
+const LBL={dribble:'Dribble',passe_courte:'Passe courte',passe_longue:'Passe longue',
+  vision:'Vision',effet:'Effet',finition:'Finition',puissance_frappe:'Puissance frappe',
+  frappe_lointaine:'Frappe lointaine',jeu_de_tete:'Jeu de tête',placement_offensif:'Placement',
+  vitesse:'Vitesse',acceleration:'Accélération',agilite:'Agilité',endurance:'Endurance',
+  force:'Force',equilibre:'Équilibre',reactivite:'Réactivité',marquage:'Marquage',
+  tacle:'Tacle',interception:'Interception',agressivite:'Agressivité'};
+const FAMILLES=[
+  {nom:'Technique',teinte:'var(--accent2)',cles:['dribble','passe_courte','passe_longue','vision','effet']},
+  {nom:'Offensif',teinte:'var(--haut)',cles:['finition','puissance_frappe','frappe_lointaine','jeu_de_tete','placement_offensif']},
+  {nom:'Physique',teinte:'var(--moyen)',cles:['vitesse','acceleration','agilite','endurance','force','equilibre','reactivite']},
+  {nom:'Défensif',teinte:'var(--accent)',cles:['marquage','tacle','interception','agressivite']}];
+const RADAR={
+  'Défenseur':['tacle','marquage','interception','jeu_de_tete','force','reactivite'],
+  'Milieu':['passe_courte','vision','dribble','endurance','interception','reactivite'],
+  'Attaquant':['finition','dribble','placement_offensif','vitesse','puissance_frappe','jeu_de_tete']};
+const GROUPE={GB:'Gardien',DG:'Défenseur',DCG:'Défenseur',DCD:'Défenseur',DD:'Défenseur',
+  MDF:'Milieu',MG:'Milieu',MCG:'Milieu',MCD:'Milieu',MD:'Milieu',
+  ATG:'Attaquant',ATD:'Attaquant',BU:'Attaquant'};
+
+let CAND=[],ATTRS={},CRITERE='note',SEL=null;
+const couleur=v=>v>=90?'var(--elite)':v>=75?'var(--haut)':v>=45?'var(--moyen)':'var(--bas)';
+
+function composer(formation,critere){
+  const sousEns=CAND.filter(c=>c.formation===formation);
+  const ordre={}; sousEns.forEach(c=>{ordre[c.poste]=c.ordre});
+  const postes=[...new Set(sousEns.map(c=>c.poste))].sort((a,b)=>ordre[a]-ordre[b]);
+  const pris=new Set(), onze=[];
+  postes.forEach(p=>{
+    const l=sousEns.filter(c=>c.poste===p&&!pris.has(c.player_name))
+      .sort((a,b)=>critere==='note'
+        ? b.overall_rating-a.overall_rating||a.distance-b.distance
+        : b.titularisations-a.titularisations||b.overall_rating-a.overall_rating);
+    if(l.length){pris.add(l[0].player_name);onze.push(l[0]);}
+  });
+  return onze;
+}
+
+function rendre(){
+  const ere=document.body.className, formation=FORMATION[ere];
+  const onze=composer(formation,CRITERE);
+  document.getElementById('puceFormation').textContent=formation;
+  document.getElementById('lblFormation').textContent=formation+' · 2015/2016 · '+onze.length+' joueurs';
+  if(!SEL||!onze.find(o=>o.player_name===SEL)) SEL=onze.length?onze[0].player_name:null;
+  terrain(onze,ere); miniListe(onze); fiche(onze.find(o=>o.player_name===SEL));
+}
+
+function terrain(onze,ere){
+  const W=344,H=452,k=FUITE[ere],mx=18,my=16;
+  const t=y=>(y-1)/10;
+  const larg=y=>(W-2*mx)*(1-t(y)*(1-k));
+  const px=(x,y)=>W/2+((x-5)/4)*(larg(y)/2);
+  const py=y=>H-my-t(y)*(H-2*my)*(k===1?1:.92);
+  const ech=y=>1-t(y)*(1-k)*.72;
+
+  let gazon='';
+  for(let i=0;i<6;i++){
+    const y0=1+i*10/6, y1=1+(i+1)*10/6;
+    gazon+='<polygon fill="'+(i%2?'var(--gazonB)':'var(--gazonA)')+'" points="'
+      +px(1,y0).toFixed(1)+','+py(y0).toFixed(1)+' '+px(9,y0).toFixed(1)+','+py(y0).toFixed(1)+' '
+      +px(9,y1).toFixed(1)+','+py(y1).toFixed(1)+' '+px(1,y1).toFixed(1)+','+py(y1).toFixed(1)+'"/>';
+  }
+  const bord='<polygon class="trace" points="'+px(1,1).toFixed(1)+','+py(1).toFixed(1)+' '
+    +px(9,1).toFixed(1)+','+py(1).toFixed(1)+' '+px(9,11).toFixed(1)+','+py(11).toFixed(1)+' '
+    +px(1,11).toFixed(1)+','+py(11).toFixed(1)+'"/>';
+  const median='<line class="trace" x1="'+px(1,6).toFixed(1)+'" y1="'+py(6).toFixed(1)
+    +'" x2="'+px(9,6).toFixed(1)+'" y2="'+py(6).toFixed(1)+'"/>';
+  const surf='<polygon class="trace" points="'+px(2.6,1).toFixed(1)+','+py(1).toFixed(1)+' '
+    +px(7.4,1).toFixed(1)+','+py(1).toFixed(1)+' '+px(7.2,2.6).toFixed(1)+','+py(2.6).toFixed(1)+' '
+    +px(2.8,2.6).toFixed(1)+','+py(2.6).toFixed(1)+'"/>'
+    +'<polygon class="trace" points="'+px(2.6,11).toFixed(1)+','+py(11).toFixed(1)+' '
+    +px(7.4,11).toFixed(1)+','+py(11).toFixed(1)+' '+px(7.2,9.4).toFixed(1)+','+py(9.4).toFixed(1)+' '
+    +px(2.8,9.4).toFixed(1)+','+py(9.4).toFixed(1)+'"/>';
+  const rond='<ellipse class="trace" cx="'+px(5,6).toFixed(1)+'" cy="'+py(6).toFixed(1)
+    +'" rx="'+(larg(6)*.19).toFixed(1)+'" ry="'+(larg(6)*.19*(k===1?1:.42)).toFixed(1)+'"/>';
+
+  let pions='';
+  [...onze].sort((a,b)=>b.sy-a.sy).forEach(o=>{
+    const cx=px(o.sx,o.sy), cy=py(o.sy), s=ech(o.sy), sel=o.player_name===SEL?' sel':'';
+    const nom=o.player_name.split(' ').slice(-1)[0].toUpperCase().slice(0,10);
+    const val=CRITERE==='note'?o.overall_rating:o.titularisations;
+    let corps;
+    if(ere==='ere-2006'){
+      corps='<circle class="pastille" cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="'+(9.5*s).toFixed(1)+'" fill="'+TEINTE[o.poste]+'"/>'
+        +'<text class="etiq" x="'+cx.toFixed(1)+'" y="'+(cy+21*s).toFixed(1)+'" text-anchor="middle" font-size="'+(7.6*s).toFixed(1)+'">'+nom+'</text>';
+    }else if(ere==='ere-2010'){
+      const w=68*s,h=16.5*s;
+      corps='<rect class="plaqueFond" x="'+(cx-w/2).toFixed(1)+'" y="'+(cy-h/2).toFixed(1)
+        +'" width="'+w.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="'+(2*s).toFixed(1)+'"/>'
+        +'<text class="plaqueNum" x="'+(cx-w/2+5*s).toFixed(1)+'" y="'+(cy+3*s).toFixed(1)+'" font-size="'+(7.6*s).toFixed(1)+'">'+val+'</text>'
+        +'<text class="plaqueTxt" x="'+(cx-w/2+21*s).toFixed(1)+'" y="'+(cy+3*s).toFixed(1)+'" font-size="'+(7.6*s).toFixed(1)+'">'+nom.slice(0,9)+'</text>';
+    }else{
+      const w=66*s,h=15*s;
+      corps='<path class="maillot" transform="translate('+cx.toFixed(1)+','+cy.toFixed(1)+') scale('+s.toFixed(2)+')" d="M-13,-11 l7,-4 h12 l7,4 l-4,7 l-3,-1.5 v13 h-12 v-13 l-3,1.5 z" fill="'+TEINTE[o.poste]+'"/>'
+        +'<rect class="plaqueFond" x="'+(cx-w/2).toFixed(1)+'" y="'+(cy+13*s).toFixed(1)
+        +'" width="'+w.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="'+(7*s).toFixed(1)+'"/>'
+        +'<text class="plaqueNum" x="'+(cx-w/2+6*s).toFixed(1)+'" y="'+(cy+23.5*s).toFixed(1)+'" font-size="'+(7.4*s).toFixed(1)+'">'+val+'</text>'
+        +'<text class="plaqueTxt" x="'+(cx-w/2+22*s).toFixed(1)+'" y="'+(cy+23.5*s).toFixed(1)+'" font-size="'+(7.4*s).toFixed(1)+'">'+nom.slice(0,9)+'</text>';
+    }
+    pions+='<g class="pion'+sel+'" data-nom="'+o.player_name.replace(/"/g,'')+'">'+corps+'</g>';
+  });
+
+  document.getElementById('terrainBoite').innerHTML=
+    '<svg class="terrainSVG" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Composition sur le terrain">'
+    +gazon+bord+median+surf+rond+pions+'</svg>';
+  document.querySelectorAll('.pion').forEach(g=>g.addEventListener('click',()=>{SEL=g.dataset.nom;rendre();}));
+}
+
+function miniListe(onze){
+  document.getElementById('miniListe').innerHTML=onze.map(o=>{
+    const val=CRITERE==='note'?o.overall_rating:o.titularisations+'/'+o.matchs_connus;
+    return '<div class="rangee'+(o.player_name===SEL?' sel':'')+'" data-nom="'+o.player_name.replace(/"/g,'')+'">'
+      +'<span class="rPoste" style="background:'+TEINTE[o.poste]+'">'+o.poste+'</span>'
+      +'<span class="rNom">'+o.player_name+'</span>'
+      +'<span class="rVal" style="color:'+couleur(o.overall_rating)+'">'+val+'</span></div>';
+  }).join('');
+  document.querySelectorAll('.rangee').forEach(r=>r.addEventListener('click',()=>{SEL=r.dataset.nom;rendre();}));
+}
+
+function fiche(o){
+  if(!o){document.getElementById('fiche').innerHTML='';return;}
+  const radar=document.body.className==='ere-2015';
+  const grp=GROUPE[o.poste];
+  const A=ATTRS[o.player_name]||null;
+  document.getElementById('formeLbl').textContent=A?(radar?'radar':'barres'):'—';
+  const rn=Math.round(o.rang_note), rt=Math.round(o.rang_temps), ec=rn-rt;
+  const groupeLbl=grp==='Gardien'?'gardiens':grp.toLowerCase()+'s';
+  const grads='<i style="left:25%"></i><i style="left:50%"></i><i style="left:75%"></i>';
+
+  let fl,tc,tx;
+  if(Math.abs(ec)<15){fl='=';tc='var(--moyen)';
+    tx='<b>Accord.</b> Le jeu et l\'entraîneur le situent au même niveau parmi les '+groupeLbl+'.';}
+  else if(ec>0){fl='▲';tc='var(--accent)';
+    tx='<b>Le jeu le place '+ec+' rangs plus haut que le terrain.</b> Mieux noté que '+rn
+      +'&nbsp;% des '+groupeLbl+', il n\'a joué plus que '+rt+'&nbsp;% d\'entre eux.';}
+  else{fl='▼';tc='var(--accent2)';
+    tx='<b>Le terrain le place '+Math.abs(ec)+' rangs plus haut que le jeu.</b> Noté devant seulement '
+      +rn+'&nbsp;% des '+groupeLbl+', il a joué plus que '+rt+'&nbsp;% d\'entre eux.';}
+
+  const verdict='<div class="verdict">'
+    +'<div class="vLigne"><span class="vLbl">Note du jeu</span>'
+    +'<span class="vNum" style="color:var(--accent2)">'+rn+'</span>'
+    +'<span class="regle">'+grads+'<span class="remplissage" style="width:'+rn+'%;background:var(--accent2);color:var(--accent2)"></span></span></div>'
+    +'<div class="vLigne"><span class="vLbl">Temps de jeu</span>'
+    +'<span class="vNum" style="color:var(--accent)">'+rt+'</span>'
+    +'<span class="regle">'+grads+'<span class="remplissage" style="width:'+rt+'%;background:var(--accent);color:var(--accent);animation-delay:110ms"></span></span></div>'
+    +'<div class="vEcart"><span class="vLbl">Écart</span>'
+    +'<span class="vNum" style="color:'+tc+'">'+(ec>0?'+':'')+ec+'</span>'
+    +'<span><span class="vFleche" style="color:'+tc+'">'+fl+'</span> <span class="vTexte">'+tx
+    +' '+o.titularisations+' titularisations sur '+o.matchs_connus+' matchs.</span></span></div></div>';
+
+  let corps='';
+  if(!A){
+    corps='<div class="sansAttr">Les attributs de champ des gardiens sont des valeurs par défaut du jeu, '
+      +'sans dispersion exploitable — aucun rang n\'est calculable pour eux.</div>';
+  }else if(radar&&RADAR[grp]){
+    let b='',i=0;
+    RADAR[grp].forEach(k=>{if(A[k]!==undefined) b+=ligneAttr(k,A[k],i++)});
+    corps='<div class="corps avecRadar"><div class="radarBoite">'+svgRadar(grp,A)+'</div>'
+      +'<div><div class="famille" style="border-color:var(--accent)">Six axes clés du poste</div>'
+      +'<div class="blocAttrs" style="grid-template-columns:1fr">'+b+'</div></div></div>';
+  }else{
+    let b='',i=0;
+    FAMILLES.forEach(f=>{
+      let l='';
+      f.cles.forEach(k=>{if(A[k]!==undefined) l+=ligneAttr(k,A[k],i++)});
+      if(l) b+='<div class="famille" style="border-color:'+f.teinte+'">'+f.nom+'</div>'
+        +'<div class="blocAttrs">'+l+'</div>';
+    });
+    corps='<div class="corps">'+b+'</div>';
+  }
+
+  document.getElementById('fiche').innerHTML=
+    '<div class="tete"><div><h2 class="ficheNom">'+o.player_name+'</h2>'
+    +'<div class="ficheClub"><span class="fanion"></span>'+(o.club||'—')+'</div>'
+    +'<div class="ficheMeta">'+grp+' · '+o.poste+' · 2015/2016</div></div>'
+    +'<div class="ficheNote"><b style="color:'+couleur(o.overall_rating)+'">'+o.overall_rating
+    +'</b><span>Note du jeu, avant la saison</span></div></div>'
+    +verdict
+    +(A?'<p class="sousTitre">Ses qualités <em>— rang parmi les '+groupeLbl+' de la saison</em></p>':'')
+    +corps;
+}
+
+function ligneAttr(k,v,i){
+  v=Math.round(v);
+  return '<div class="attr"><span class="attrLbl">'+LBL[k]+'</span>'
+    +'<span class="attrVal" style="color:'+couleur(v)+'">'+v+'</span>'
+    +'<span class="attrPiste"><span class="attrRempli" style="width:'+v+'%;background:'
+    +couleur(v)+';animation-delay:'+(i*24)+'ms"></span></span></div>';
+}
+
+function svgRadar(grp,A){
+  const cles=RADAR[grp],n=cles.length,cx=116,cy=116,R=70;
+  const pt=(i,r)=>{const a=Math.PI*2*i/n-Math.PI/2;return[cx+Math.cos(a)*r,cy+Math.sin(a)*r]};
+  let toile='';
+  [.25,.5,.75,1].forEach(k=>{toile+='<polygon class="rToile" points="'
+    +Array.from({length:n},(_,i)=>pt(i,R*k).map(v=>v.toFixed(1)).join(',')).join(' ')+'"/>'});
+  const med=Array.from({length:n},(_,i)=>pt(i,R*.5).map(v=>v.toFixed(1)).join(',')).join(' ');
+  let axes='',lbls='',pts='';
+  const forme=cles.map((k,i)=>{
+    const val=Math.round(A[k]||0), v=Math.max(0,Math.min(100,val))/100;
+    const[x,y]=pt(i,R*v),[ax,ay]=pt(i,R),[lx,ly]=pt(i,R+21);
+    axes+='<line class="rAxe" x1="'+cx+'" y1="'+cy+'" x2="'+ax.toFixed(1)+'" y2="'+ay.toFixed(1)+'"/>';
+    lbls+='<text class="rLbl" x="'+lx.toFixed(1)+'" y="'+(ly-4).toFixed(1)+'" text-anchor="middle">'+LBL[k]+'</text>'
+      +'<text class="rVal" x="'+lx.toFixed(1)+'" y="'+(ly+8).toFixed(1)+'" text-anchor="middle" fill="'+couleur(val)+'">'+val+'</text>';
+    pts+='<circle class="rPt" cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="3"/>';
+    return x.toFixed(1)+','+y.toFixed(1);}).join(' ');
+  return '<svg viewBox="0 0 232 236" width="232" height="236" role="img" aria-label="Radar de rangs">'
+    +toile+axes+'<polygon class="rMed" points="'+med+'"/>'
+    +'<polygon class="rForme" points="'+forme+'"/>'+pts+lbls+'</svg>';
+}
+
+Promise.all([
+  fetch('data/onze.json').then(r=>{if(!r.ok)throw 0;return r.json()}),
+  fetch('data/gardiens.json').then(r=>{if(!r.ok)throw 0;return r.json()}),
+  fetch('data/joueurs.json').then(r=>{if(!r.ok)throw 0;return r.json()})
+]).then(([a,b,c])=>{
+  CAND=a.concat(b);
+  c.forEach(j=>{const m={};(j.attributs||[]).forEach(o=>{m[o.a]=o.v});ATTRS[j.player_name]=m;});
+  document.getElementById('plateau').hidden=false;
+  rendre();
+}).catch(()=>{document.getElementById('erreur').hidden=false});
+
+document.querySelectorAll('.cmd').forEach(b=>b.addEventListener('click',()=>{
+  CRITERE=b.dataset.critere;SEL=null;
+  document.querySelectorAll('.cmd').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  rendre();}));
+document.querySelectorAll('.gen').forEach(b=>b.addEventListener('click',()=>{
+  document.body.className=b.dataset.ere;
+  document.querySelectorAll('.gen').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  rendre();}));
+</script>
+
+</body>
+</html>

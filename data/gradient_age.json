@@ -1,0 +1,6 @@
+[
+	{"tranche_age":"1. moins de 23 ans","n":1139,"anticipation":0.072,"reaction":0.36},
+	{"tranche_age":"2. 23 a 27 ans","n":2927,"anticipation":0.101,"reaction":0.303},
+	{"tranche_age":"3. 28 a 31 ans","n":1915,"anticipation":0.102,"reaction":0.285},
+	{"tranche_age":"4. 32 ans et plus","n":959,"anticipation":0.118,"reaction":0.229}
+]

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Les cas — quand le jeu et le terrain se contredisent</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+.ere-2006{--dalle:#4a545f;--dalleh:#616d7a;--creux:#1b2026;--biseau:#9aa6b2;--biseauclair:#d6dee5;
+  --biseauEp:2px;--encre:#fff;--encre2:#e6ebef;--discret:#b9c1c9;--accent:#f5c518;--accent2:#5aa8e8;
+  --elite:#ff6b6b;--haut:#ffd93d;--moyen:#6edb8a;--bas:#c2cad2;--titre:"Barlow Condensed";
+  --espace:.02em;--r:0px;--rd:0px;--gazonA:#33543c;--gazonB:#2a4632;--ciel:#2b333b;
+  --metal:linear-gradient(180deg,#6d7883 0%,#4e5862 42%,#39424b 100%)}
+.ere-2010{--dalle:#161b24;--dalleh:#222834;--creux:#080b10;--biseau:#39414d;--biseauclair:#59636f;
+  --biseauEp:1px;--encre:#f4f6f9;--encre2:#aab4c2;--discret:#727b89;--accent:#e8206c;--accent2:#00b4e0;
+  --elite:#ff4d5e;--haut:#ffc93c;--moyen:#5ad07a;--bas:#8a94a2;--titre:"Oswald";
+  --espace:.06em;--r:2px;--rd:3px;--gazonA:#16402a;--gazonB:#10301f;--ciel:#080d14;
+  --metal:linear-gradient(180deg,#2a313d 0%,#181d26 100%)}
+.ere-2015{--dalle:#15304f;--dalleh:#1f4269;--creux:#050e18;--biseau:#2d5580;--biseauclair:#4a7aae;
+  --biseauEp:1px;--encre:#fff;--encre2:#b8cee5;--discret:#7f99b5;--accent:#00d4ff;--accent2:#7fe3a0;
+  --elite:#ff5a5a;--haut:#ffd24a;--moyen:#4fd48a;--bas:#8fa9c4;--titre:"Inter";
+  --espace:.14em;--r:5px;--rd:9px;--gazonA:#1b5c38;--gazonB:#14492c;--ciel:#061420;
+  --metal:linear-gradient(180deg,#1f4269 0%,#12283f 100%)}
+
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;color:var(--encre);background:var(--ciel);font-family:Inter,-apple-system,sans-serif;
+  line-height:1.42;font-variant-numeric:tabular-nums lining-nums}
+#fond{position:fixed;inset:0;z-index:-4;background:var(--ciel);overflow:hidden}
+#fond::before{content:"";position:absolute;left:-60%;right:-60%;bottom:-30%;height:118%;
+  background:repeating-linear-gradient(90deg,var(--gazonA) 0px,var(--gazonA) 120px,
+    var(--gazonB) 120px,var(--gazonB) 240px);
+  transform:perspective(700px) rotateX(64deg);transform-origin:bottom center}
+#voile{position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,.74) 46%,rgba(0,0,0,.86) 100%)}
+#grain{position:fixed;inset:-40%;z-index:-2;pointer-events:none;opacity:.10;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E");
+  animation:fourmille 700ms steps(4) infinite}
+@keyframes fourmille{0%{transform:translate(0,0)}25%{transform:translate(-2%,1%)}
+  50%{transform:translate(1%,-2%)}75%{transform:translate(-1%,-1%)}}
+#scan{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:repeating-linear-gradient(180deg,rgba(0,0,0,.16) 0px,rgba(0,0,0,.16) 1px,transparent 1px,transparent 3px)}
+#vignette{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 98% 86% at 50% 44%,transparent 42%,rgba(0,0,0,.62) 100%)}
+
+.systeme{position:sticky;top:0;z-index:20;background:var(--metal);
+  border-bottom:var(--biseauEp) solid var(--biseau);
+  box-shadow:inset 0 1px 0 var(--biseauclair),0 3px 14px rgba(0,0,0,.65)}
+.systeme-in{max-width:1000px;margin:0 auto;padding:0 14px;display:flex;align-items:stretch;
+  flex-wrap:wrap;min-height:42px}
+.onglet{display:flex;align-items:center;gap:7px;padding:0 15px;text-decoration:none;
+  border-right:1px solid rgba(0,0,0,.35);box-shadow:1px 0 0 rgba(255,255,255,.07);
+  color:var(--discret);font-family:var(--titre),Inter,sans-serif;font-size:11px;
+  letter-spacing:.13em;text-transform:uppercase;font-weight:600;position:relative;
+  transition:all 160ms cubic-bezier(.22,1,.36,1)}
+.onglet:first-child{border-left:1px solid rgba(0,0,0,.35)}
+.onglet .num{font-family:"JetBrains Mono",monospace;font-size:9.5px;font-weight:700;
+  color:var(--creux);background:var(--discret);padding:1px 5px;border-radius:var(--r)}
+.onglet:hover{color:var(--encre);background:rgba(255,255,255,.07)}
+.onglet[aria-current="page"]{color:var(--encre);background:rgba(0,0,0,.34)}
+.onglet[aria-current="page"] .num{background:var(--accent);color:var(--creux)}
+.onglet[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--accent)}
+.generation{margin-left:auto;display:flex;align-items:center;padding:5px 0}
+.generation .lbl{font-family:var(--titre),Inter,sans-serif;font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--discret);font-weight:700;margin-right:9px;white-space:nowrap}
+.gen{background:rgba(0,0,0,.32);border:1px solid rgba(0,0,0,.5);border-top-color:rgba(255,255,255,.14);
+  color:var(--encre2);font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700;
+  padding:6px 11px;cursor:pointer;transition:all 160ms cubic-bezier(.22,1,.36,1)}
+.gen:first-of-type{border-radius:var(--r) 0 0 var(--r)}
+.gen:last-of-type{border-radius:0 var(--r) var(--r) 0}
+.gen:hover{background:rgba(255,255,255,.1);color:var(--encre)}
+.gen[aria-pressed="true"]{background:var(--accent);color:var(--creux);border-color:var(--accent);
+  box-shadow:0 0 12px -2px var(--accent)}
+
+.ecran{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:18px 14px 70px}
+.bandeau{background:var(--metal);border:var(--biseauEp) solid var(--biseau);
+  border-top-color:var(--biseauclair);border-radius:var(--rd);padding:11px 16px;
+  display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;
+  box-shadow:inset 0 1px 0 var(--biseauclair),0 4px 16px rgba(0,0,0,.6)}
+.bandeau::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent)}
+.ecusson{width:28px;height:28px;flex:none;background:var(--accent);
+  clip-path:polygon(50% 0%,100% 22%,100% 66%,50% 100%,0% 66%,0% 22%);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--titre),Inter,sans-serif;font-weight:700;font-size:12px;color:var(--creux)}
+.bandeau h1{font-family:var(--titre),Inter,sans-serif;font-weight:600;
+  font-size:clamp(15px,2.4vw,21px);letter-spacing:var(--espace);text-transform:uppercase;margin:0}
+.bandeau .puce{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:9.5px;
+  font-weight:700;letter-spacing:.09em;color:var(--creux);background:var(--accent);
+  padding:3px 8px;border-radius:var(--r);white-space:nowrap}
+.lettre{display:inline-block;opacity:0;transform:translateY(.34em)}
+.vu .lettre{opacity:1;transform:none;transition:opacity 380ms cubic-bezier(.22,1,.36,1),transform 380ms cubic-bezier(.22,1,.36,1)}
+.balayage{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.26) 50%,transparent 62%);
+  transform:translateX(-110%)}
+.vu .balayage{animation:balaye 1000ms cubic-bezier(.22,1,.36,1) 220ms both}
+@keyframes balaye{to{transform:translateX(110%)}}
+
+.chapeau{font-size:13.5px;color:var(--encre);max-width:78ch;margin:11px 0 0;
+  text-shadow:0 2px 10px rgba(0,0,0,1);line-height:1.55}
+.chapeau strong{font-weight:600}
+
+.commandes{display:flex;gap:9px;margin:14px 0 0;flex-wrap:wrap}
+.groupeBtn{display:flex;background:rgba(0,0,0,.42);border:var(--biseauEp) solid var(--biseau);
+  border-top-color:var(--biseauclair);border-radius:var(--rd);overflow:hidden}
+.groupeBtn .lbl{display:flex;align-items:center;padding:0 11px;
+  font-family:var(--titre),Inter,sans-serif;font-size:9px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--discret);font-weight:700;
+  border-right:1px solid rgba(0,0,0,.45);white-space:nowrap}
+.cmd{background:none;border:0;border-right:1px solid rgba(0,0,0,.45);
+  box-shadow:1px 0 0 rgba(255,255,255,.06);padding:8px 14px;cursor:pointer;color:var(--discret);
+  font-family:var(--titre),Inter,sans-serif;font-size:10.5px;letter-spacing:.12em;
+  text-transform:uppercase;font-weight:600;transition:all 160ms cubic-bezier(.22,1,.36,1)}
+.cmd:last-child{border-right:0;box-shadow:none}
+.cmd:hover{color:var(--encre);background:rgba(255,255,255,.06)}
+.cmd[aria-pressed="true"]{color:var(--creux);background:var(--accent);box-shadow:inset 0 -2px 0 rgba(0,0,0,.25)}
+
+.colonne{background:linear-gradient(180deg,var(--dalle) 0%,rgba(0,0,0,.9) 100%);
+  border:var(--biseauEp) solid var(--biseau);border-top-color:var(--biseauclair);
+  border-radius:var(--rd);overflow:hidden;margin-top:11px;
+  box-shadow:inset 0 1px 0 var(--biseauclair),0 4px 16px rgba(0,0,0,.6)}
+.coltitre{background:var(--metal);border-bottom:1px solid var(--biseau);padding:6px 13px;
+  font-family:var(--titre),Inter,sans-serif;font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;font-weight:600;color:var(--encre2);
+  display:flex;justify-content:space-between;align-items:center}
+.coltitre em{font-style:normal;font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--discret)}
+
+.cas{display:grid;grid-template-columns:26px minmax(0,1.5fr) minmax(0,2fr) 58px;gap:11px;
+  align-items:center;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.06)}
+.cas:last-child{border-bottom:none}
+.rang{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--discret);text-align:right}
+.qui{min-width:0}
+.quiNom{font-family:var(--titre),Inter,sans-serif;font-size:15px;font-weight:600;
+  letter-spacing:var(--espace);text-transform:uppercase;line-height:1.1;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.quiMeta{font-size:10px;color:var(--discret);letter-spacing:.05em;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.duo{display:grid;gap:3px}
+.duoL{display:grid;grid-template-columns:64px 28px minmax(0,1fr);gap:7px;align-items:center}
+.duoLbl{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--discret);
+  font-family:var(--titre),Inter,sans-serif;font-weight:700}
+.duoNum{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;text-align:right}
+.piste{position:relative;height:9px;background:rgba(0,0,0,.6);border:1px solid rgba(0,0,0,.75);
+  border-radius:var(--r);box-shadow:inset 0 1px 3px rgba(0,0,0,.85)}
+.rempli{position:absolute;left:0;top:0;bottom:0;border-radius:0 var(--r) var(--r) 0;
+  transform-origin:left center;animation:pousser 560ms cubic-bezier(.22,1,.36,1) both}
+@keyframes pousser{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.delta{text-align:right;font-family:"JetBrains Mono",monospace;font-size:17px;font-weight:700;
+  white-space:nowrap}
+.delta small{display:block;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--discret);font-family:var(--titre),Inter,sans-serif;font-weight:700}
+
+.note{border-left:3px solid var(--accent);padding:11px 14px 11px 12px;margin:18px 0 0;
+  background:rgba(0,0,0,.74);border-radius:0 var(--r) var(--r) 0}
+.noteTitre{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:6px;font-family:var(--titre),Inter,sans-serif}
+.note p{font-size:11.5px;color:var(--encre2);margin:0 0 6px;line-height:1.55}
+.note p:last-child{margin-bottom:0}
+.note b{color:var(--encre)}
+.erreur{border-left:3px solid var(--elite);padding:12px 14px;margin:16px 0;font-size:13px;
+  color:var(--encre2);background:rgba(0,0,0,.75)}
+.erreur code{font-family:"JetBrains Mono",monospace;font-size:12px;background:var(--creux);
+  padding:2px 6px;border-radius:2px;color:var(--encre)}
+
+@media (max-width:760px){
+  .cas{grid-template-columns:22px minmax(0,1fr) 52px;gap:9px}
+  .duo{grid-column:1 / -1}
+}
+@media (prefers-reduced-motion:reduce){
+  .lettre{opacity:1;transform:none;transition:none}
+  .balayage{display:none}#grain{animation:none}.rempli{animation:none}
+}
+</style>
+</head>
+<body class="ere-2010">
+
+<div id="fond"></div><div id="voile"></div><div id="grain"></div><div id="scan"></div><div id="vignette"></div>
+
+<nav class="systeme" aria-label="Navigation">
+  <div class="systeme-in">
+    <a class="onglet" href="ecran1-onze.html"><span class="num">01</span>Le onze</a>
+    <a class="onglet" href="ecran2-gradient.html"><span class="num">02</span>Le résultat</a>
+    <a class="onglet" href="ecran3-cas.html" aria-current="page"><span class="num">03</span>Les cas</a>
+    <div class="generation" role="group" aria-label="Génération d'interface">
+      <span class="lbl">Génération</span>
+      <button class="gen" data-ere="ere-2006" aria-pressed="false">2006</button>
+      <button class="gen" data-ere="ere-2010" aria-pressed="true">2010</button>
+      <button class="gen" data-ere="ere-2015" aria-pressed="false">2015</button>
+    </div>
+  </div>
+</nav>
+
+<section class="ecran">
+
+  <div class="bandeau" id="bandeau">
+    <div class="ecusson">03</div>
+    <h1 id="titre">Quand le jeu et le terrain se contredisent</h1>
+    <div class="puce">22 — 29 ans</div>
+    <div class="balayage"></div>
+  </div>
+
+  <p class="chapeau">
+    Les plus grands désaccords entre le classement du jeu et celui de l'entraîneur.
+    <strong>Restreint aux 22-29 ans</strong> — sans cette borne, la liste ne contiendrait que des
+    joueurs en fin de carrière, et ne dirait rien d'autre que « les vétérans jouent moins ».
+  </p>
+
+  <div class="commandes">
+    <div class="groupeBtn" role="group" aria-label="Sens du désaccord">
+      <span class="lbl">Sens</span>
+      <button class="cmd" data-sens="sur" aria-pressed="true">Le jeu au-dessus</button>
+      <button class="cmd" data-sens="sous" aria-pressed="false">Le terrain au-dessus</button>
+    </div>
+  </div>
+
+  <div class="colonne" id="colonne" hidden>
+    <div class="coltitre"><span id="lblSens">Le jeu les classe plus haut que le terrain</span><em id="compteur"></em></div>
+    <div id="liste"></div>
+  </div>
+
+  <div class="erreur" id="erreur" hidden>
+    <p><b>Les données ne se chargent pas.</b> Cette page lit un fichier externe : elle doit être servie
+    par un serveur.</p>
+    <p><code>cd ~/data-portfolio &amp;&amp; python3 -m http.server 8000</code></p>
+  </div>
+
+  <div class="note">
+    <div class="noteTitre">Ce que cette page ne prouve pas</div>
+    <p><b>Un désaccord n'est pas une erreur du jeu.</b> Une blessure longue, une suspension ou une
+    mise à l'écart par l'entraîneur produisent exactement le même signal qu'une surnotation. La source
+    ne contient ni blessures ni suspensions, et <b>rien ne permet de les distinguer</b>.</p>
+    <p>Vérification faite sur les vingt premiers cas de la période complète : la quasi-totalité
+    s'expliquent par une blessure ou une décision d'entraîneur documentée, pas par une mauvaise
+    évaluation du niveau. <b>Cette page illustre l'ampleur du désaccord, elle ne l'explique pas.</b></p>
+    <p>Les rangs sont calculés au sein du poste et de la saison. Les joueurs ayant changé de club en
+    cours de saison sont exclus : aucun dénominateur correct n'existe pour eux.</p>
+  </div>
+
+</section>
+
+<script>
+const titre=document.getElementById('titre');
+const txt=titre.textContent; titre.textContent='';
+[...txt].forEach((c,i)=>{const s=document.createElement('span');s.className='lettre';
+  s.textContent=c===' '?'\u00A0':c;s.style.transitionDelay=(i*22)+'ms';titre.appendChild(s);});
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vu');obs.unobserve(e.target);}})},{threshold:.2});
+obs.observe(document.getElementById('bandeau'));
+
+let TOUS=[],SENS='sur';
+
+function rendre(){
+  const l=TOUS.filter(c=>SENS==='sur'?c.ecart>0:c.ecart<0)
+    .sort((a,b)=>SENS==='sur'?b.ecart-a.ecart:a.ecart-b.ecart).slice(0,20);
+  document.getElementById('lblSens').textContent=SENS==='sur'
+    ? 'Le jeu les classe plus haut que le terrain'
+    : 'Le terrain les classe plus haut que le jeu';
+  document.getElementById('compteur').textContent=l.length+' cas';
+  const tc=SENS==='sur'?'var(--accent)':'var(--accent2)';
+  document.getElementById('liste').innerHTML=l.map((c,i)=>{
+    const rn=Math.round(c.rang_note), rt=Math.round(c.rang_temps);
+    return '<div class="cas">'
+      +'<span class="rang">'+(i+1)+'</span>'
+      +'<span class="qui"><div class="quiNom">'+c.player_name+'</div>'
+      +'<div class="quiMeta">'+c.club+' · '+c.poste_groupe+' · '+c.season+' · '+c.age+' ans</div></span>'
+      +'<span class="duo">'
+        +'<span class="duoL"><span class="duoLbl">Note</span>'
+        +'<span class="duoNum" style="color:var(--accent2)">'+rn+'</span>'
+        +'<span class="piste"><span class="rempli" style="width:'+rn+'%;background:var(--accent2);animation-delay:'+(i*22)+'ms"></span></span></span>'
+        +'<span class="duoL"><span class="duoLbl">Terrain</span>'
+        +'<span class="duoNum" style="color:var(--accent)">'+rt+'</span>'
+        +'<span class="piste"><span class="rempli" style="width:'+rt+'%;background:var(--accent);animation-delay:'+(i*22+80)+'ms"></span></span></span>'
+      +'</span>'
+      +'<span class="delta" style="color:'+tc+'">'+(c.ecart>0?'▲':'▼')+Math.abs(c.ecart)
+      +'<small>'+c.titularisations+'/'+c.matchs_connus+'</small></span>'
+      +'</div>';
+  }).join('');
+}
+
+fetch('data/cas.json').then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>{
+  TOUS=d;document.getElementById('colonne').hidden=false;rendre();
+}).catch(()=>{document.getElementById('erreur').hidden=false});
+
+document.querySelectorAll('.cmd').forEach(b=>b.addEventListener('click',()=>{
+  SENS=b.dataset.sens;
+  document.querySelectorAll('.cmd').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  rendre();}));
+document.querySelectorAll('.gen').forEach(b=>b.addEventListener('click',()=>{
+  document.body.className=b.dataset.ere;
+  document.querySelectorAll('.gen').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));}));
+</script>
+
+</body>
+</html>

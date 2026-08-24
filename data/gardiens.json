@@ -1,0 +1,18 @@
+[
+	{"formation":"4-4-2","poste":"GB","sx":5,"sy":1,"ordre":1,"player_name":"Manuel Neuer","club":"FC Bayern Munich","overall_rating":90,"rang_note":100.0,"rang_temps":92.0,"titularisations":34,"matchs_connus":34,"distance":0.0},
+	{"formation":"4-4-2","poste":"GB","sx":5,"sy":1,"ordre":1,"player_name":"Thibaut Courtois","club":"Chelsea","overall_rating":86,"rang_note":99.0,"rang_temps":57.0,"titularisations":23,"matchs_connus":38,"distance":0.0},
+	{"formation":"4-4-2","poste":"GB","sx":5,"sy":1,"ordre":1,"player_name":"David De Gea","club":"Manchester United","overall_rating":86,"rang_note":99.0,"rang_temps":75.0,"titularisations":34,"matchs_connus":38,"distance":0.0},
+	{"formation":"4-4-2","poste":"GB","sx":5,"sy":1,"ordre":1,"player_name":"Petr Cech","club":"Arsenal","overall_rating":85,"rang_note":99.0,"rang_temps":75.0,"titularisations":34,"matchs_connus":38,"distance":0.0},
+	{"formation":"4-4-2","poste":"GB","sx":5,"sy":1,"ordre":1,"player_name":"Hugo Lloris","club":"Tottenham Hotspur","overall_rating":85,"rang_note":99.0,"rang_temps":88.0,"titularisations":37,"matchs_connus":38,"distance":0.0},
+	{"formation":"4-4-2","poste":"GB","sx":5,"sy":1,"ordre":1,"player_name":"Iker Casillas","club":"FC Porto","overall_rating":84,"rang_note":99.0,"rang_temps":81.0,"titularisations":32,"matchs_connus":34,"distance":0.0},
+	{"formation":"4-4-2","poste":"GB","sx":5,"sy":1,"ordre":1,"player_name":"Salvatore Sirigu","club":"Paris Saint-Germain","overall_rating":83,"rang_note":96.0,"rang_temps":10.0,"titularisations":2,"matchs_connus":38,"distance":0.0},
+	{"formation":"4-4-2","poste":"GB","sx":5,"sy":1,"ordre":1,"player_name":"Samir Handanovic","club":"Inter","overall_rating":83,"rang_note":96.0,"rang_temps":83.0,"titularisations":36,"matchs_connus":38,"distance":0.0},
+	{"formation":"4-5-1","poste":"GB","sx":5,"sy":1,"ordre":1,"player_name":"Manuel Neuer","club":"FC Bayern Munich","overall_rating":90,"rang_note":100.0,"rang_temps":92.0,"titularisations":34,"matchs_connus":34,"distance":0.0},
+	{"formation":"4-5-1","poste":"GB","sx":5,"sy":1,"ordre":1,"player_name":"Thibaut Courtois","club":"Chelsea","overall_rating":86,"rang_note":99.0,"rang_temps":57.0,"titularisations":23,"matchs_connus":38,"distance":0.0},
+	{"formation":"4-5-1","poste":"GB","sx":5,"sy":1,"ordre":1,"player_name":"David De Gea","club":"Manchester United","overall_rating":86,"rang_note":99.0,"rang_temps":75.0,"titularisations":34,"matchs_connus":38,"distance":0.0},
+	{"formation":"4-5-1","poste":"GB","sx":5,"sy":1,"ordre":1,"player_name":"Petr Cech","club":"Arsenal","overall_rating":85,"rang_note":99.0,"rang_temps":75.0,"titularisations":34,"matchs_connus":38,"distance":0.0},
+	{"formation":"4-5-1","poste":"GB","sx":5,"sy":1,"ordre":1,"player_name":"Hugo Lloris","club":"Tottenham Hotspur","overall_rating":85,"rang_note":99.0,"rang_temps":88.0,"titularisations":37,"matchs_connus":38,"distance":0.0},
+	{"formation":"4-5-1","poste":"GB","sx":5,"sy":1,"ordre":1,"player_name":"Iker Casillas","club":"FC Porto","overall_rating":84,"rang_note":99.0,"rang_temps":81.0,"titularisations":32,"matchs_connus":34,"distance":0.0},
+	{"formation":"4-5-1","poste":"GB","sx":5,"sy":1,"ordre":1,"player_name":"Salvatore Sirigu","club":"Paris Saint-Germain","overall_rating":83,"rang_note":96.0,"rang_temps":10.0,"titularisations":2,"matchs_connus":38,"distance":0.0},
+	{"formation":"4-5-1","poste":"GB","sx":5,"sy":1,"ordre":1,"player_name":"Samir Handanovic","club":"Inter","overall_rating":83,"rang_note":96.0,"rang_temps":83.0,"titularisations":36,"matchs_connus":38,"distance":0.0}
+]
