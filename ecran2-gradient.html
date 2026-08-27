@@ -313,9 +313,55 @@ td:first-child{font-family:Inter,sans-serif;color:var(--encre)}
   .balayage{display:none}
   body{transition:none}
 }
+
+.systeme{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,var(--dalleh,#232935),var(--dalle,#1a1f28));
+  border-bottom:1px solid var(--biseau,#3d4551);
+  box-shadow:inset 0 1px 0 var(--biseauclair,#5a6472),0 3px 14px rgba(0,0,0,.65)}
+.systeme-in{max-width:920px;margin:0 auto;padding:0 14px;display:flex;align-items:stretch;
+  flex-wrap:wrap;min-height:42px}
+.onglet{display:flex;align-items:center;gap:7px;padding:0 15px;text-decoration:none;
+  border-right:1px solid rgba(0,0,0,.35);box-shadow:1px 0 0 rgba(255,255,255,.07);
+  color:var(--discret);font-family:var(--titre),Inter,sans-serif;font-size:11px;
+  letter-spacing:.13em;text-transform:uppercase;font-weight:600;position:relative;
+  transition:all 160ms cubic-bezier(.22,1,.36,1)}
+.onglet:first-child{border-left:1px solid rgba(0,0,0,.35)}
+.onglet .num{font-family:"JetBrains Mono",monospace;font-size:9.5px;font-weight:700;
+  color:var(--plan,#0a0d12);background:var(--discret);padding:1px 5px;border-radius:var(--r)}
+.onglet:hover{color:var(--encre);background:rgba(255,255,255,.07)}
+.onglet[aria-current="page"]{color:var(--encre);background:rgba(0,0,0,.34)}
+.onglet[aria-current="page"] .num{background:var(--accent);color:var(--plan,#0a0d12)}
+.onglet[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:0;
+  height:3px;background:var(--accent)}
+.generation{margin-left:auto;display:flex;align-items:center;padding:5px 0}
+.generation .lbl{font-family:var(--titre),Inter,sans-serif;font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--discret);font-weight:700;margin-right:9px;white-space:nowrap}
+.gen{background:rgba(0,0,0,.32);border:1px solid rgba(0,0,0,.5);
+  border-top-color:rgba(255,255,255,.14);color:var(--encre-2,#aab4c2);
+  font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700;
+  padding:6px 11px;cursor:pointer;transition:all 160ms cubic-bezier(.22,1,.36,1)}
+.gen:first-of-type{border-radius:var(--r) 0 0 var(--r)}
+.gen:last-of-type{border-radius:0 var(--r) var(--r) 0}
+.gen:hover{background:rgba(255,255,255,.1);color:var(--encre)}
+.gen[aria-pressed="true"]{background:var(--accent);color:var(--plan,#0a0d12);
+  border-color:var(--accent);box-shadow:0 0 12px -2px var(--accent)}
 </style>
 </head>
 <body class="ere-2010">
+
+<nav class="systeme" aria-label="Navigation">
+  <div class="systeme-in">
+    <a class="onglet" href="ecran1-onze.html"><span class="num">01</span>Le onze</a>
+    <a class="onglet" href="ecran2-gradient.html" aria-current="page"><span class="num">02</span>Le r&eacute;sultat</a>
+    <a class="onglet" href="ecran3-cas.html"><span class="num">03</span>Les cas</a>
+    <div class="generation" role="group" aria-label="G&eacute;n&eacute;ration d'interface">
+      <span class="lbl">G&eacute;n&eacute;ration</span>
+      <button class="gen" data-ere="ere-2006" aria-pressed="false">2006</button>
+      <button class="gen" data-ere="ere-2010" aria-pressed="true">2010</button>
+      <button class="gen" data-ere="ere-2015" aria-pressed="false">2015</button>
+    </div>
+  </div>
+</nav>
+
 
 <section class="ecran">
 
@@ -459,5 +505,17 @@ document.querySelectorAll('.eres button').forEach(b => {
 });
 </script>
 
+<script>
+/* Synchronise le commutateur du haut et celui du bas */
+function majEres(cible){
+  document.body.className = cible;
+  document.querySelectorAll('.gen, .eres button').forEach(function(x){
+    x.setAttribute('aria-pressed', String(x.dataset.ere === cible));
+  });
+}
+document.querySelectorAll('.gen, .eres button').forEach(function(b){
+  b.addEventListener('click', function(){ majEres(b.dataset.ere); });
+});
+</script>
 </body>
 </html>
